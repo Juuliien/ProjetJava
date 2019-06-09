@@ -1,20 +1,19 @@
-package model;
-
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+package jdbcv2018;
 
 /*
  * 
- * Librairies importées
+ * Librairies importÃ©es
  */
 import java.sql.*;
 import java.util.ArrayList;
 
 /**
  * 
- * Connexion a votre BDD locale ou à distance sur le serveur de l'ECE via le tunnel SSH
+ * Connexion a votre BDD locale ou Ã  distance sur le serveur de l'ECE via le tunnel SSH
  * 
  * @author segado
  */
@@ -24,7 +23,7 @@ public class Connexion {
      * Attributs prives : connexion JDBC, statement, ordre requete et resultat
      * requete
      */
-    private static Connection conn; //Modifer afin de ne pas instancier la classe plusieurs fois
+    private Connection conn;
     private Statement stmt;
     private ResultSet rset;
     private ResultSetMetaData rsetMeta;
@@ -33,16 +32,16 @@ public class Connexion {
      */
     public ArrayList<String> tables = new ArrayList<>();
     /**
-     * ArrayList public pour les requêtes de sélection
+     * ArrayList public pour les requÃªtes de sÃ©lection
      */
     public ArrayList<String> requetes = new ArrayList<>();
     /**
-     * ArrayList public pour les requêtes de MAJ
+     * ArrayList public pour les requÃªtes de MAJ
      */
     public ArrayList<String> requetesMaj = new ArrayList<>();
 
     /**
-     * Constructeur avec 3 paramètres : nom, login et password de la BDD locale
+     * Constructeur avec 3 paramÃ¨tres : nom, login et password de la BDD locale
      *
      * @param nameDatabase
      * @param loginDatabase
@@ -50,25 +49,23 @@ public class Connexion {
      * @throws java.sql.SQLException
      * @throws java.lang.ClassNotFoundException
      */
-    public Connexion(String serverDatabase, String nameDatabase, String loginDatabase, String passwordDatabase) throws SQLException, ClassNotFoundException {
+    public Connexion(String nameDatabase, String loginDatabase, String passwordDatabase) throws SQLException, ClassNotFoundException {
         // chargement driver "com.mysql.jdbc.Driver"
         Class.forName("com.mysql.jdbc.Driver");
 
         // url de connexion "jdbc:mysql://localhost:3305/usernameECE"
-        String urlDatabase = "jdbc:mysql://" +serverDatabase+ "/" + nameDatabase;
+        String urlDatabase = "jdbc:mysql://localhost/" + nameDatabase;
 
-        //création d'une connexion JDBC à la base 
+        //crÃ©ation d'une connexion JDBC Ã  la base 
         conn = DriverManager.getConnection(urlDatabase, loginDatabase, passwordDatabase);
 
-        // création d'un ordre SQL (statement)
+        // crÃ©ation d'un ordre SQL (statement)
         stmt = conn.createStatement();
-        
-        System.out.print("test");
     }
 
     /**
-     * Constructeur avec 4 paramètres : username et password ECE, login et
-     * password de la BDD à distance sur le serveur de l'ECE
+     * Constructeur avec 4 paramÃ¨tres : username et password ECE, login et
+     * password de la BDD Ã  distance sur le serveur de l'ECE
      * @param usernameECE
      * @param passwordECE
      * @param loginDatabase
@@ -76,7 +73,7 @@ public class Connexion {
      * @throws java.sql.SQLException
      * @throws java.lang.ClassNotFoundException
      */
-    /*public Connexion(String usernameECE, String passwordECE, String loginDatabase, String passwordDatabase) throws SQLException, ClassNotFoundException {
+    public Connexion(String usernameECE, String passwordECE, String loginDatabase, String passwordDatabase) throws SQLException, ClassNotFoundException {
         // chargement driver "com.mysql.jdbc.Driver"
         Class.forName("com.mysql.jdbc.Driver");
 
@@ -89,17 +86,17 @@ public class Connexion {
             // url de connexion "jdbc:mysql://localhost:3305/usernameECE"
             String urlDatabase = "jdbc:mysql://localhost:3305/" + usernameECE;
 
-            //création d'une connexion JDBC à la base
+            //crÃ©ation d'une connexion JDBC Ã  la base
             conn = DriverManager.getConnection(urlDatabase, loginDatabase, passwordDatabase);
 
-            // création d'un ordre SQL (statement)
+            // crÃ©ation d'un ordre SQL (statement)
             stmt = conn.createStatement();
 
         }
-    }*/
+    }
 
     /**
-     * Méthode qui ajoute la table en parametre dans son ArrayList
+     * MÃ©thode qui ajoute la table en parametre dans son ArrayList
      *
      * @param table
      */
@@ -108,7 +105,7 @@ public class Connexion {
     }
 
     /**
-     * Méthode qui ajoute la requete de selection en parametre dans son
+     * MÃ©thode qui ajoute la requete de selection en parametre dans son
      * ArrayList
      *
      * @param requete
@@ -118,7 +115,7 @@ public class Connexion {
     }
 
     /**
-     * Méthode qui ajoute la requete de MAJ en parametre dans son
+     * MÃ©thode qui ajoute la requete de MAJ en parametre dans son
      * ArrayList
      *
      * @param requete
@@ -128,17 +125,17 @@ public class Connexion {
     }
 
     /**
-     * Méthode qui retourne l'ArrayList des champs de la table en parametre
+     * MÃ©thode qui retourne l'ArrayList des champs de la table en parametre
      *
      * @param table
      * @return
      * @throws java.sql.SQLException
      */
     public ArrayList remplirChampsTable(String table) throws SQLException {
-        // récupération de l'ordre de la requete
+        // rÃ©cupÃ©ration de l'ordre de la requete
         rset = stmt.executeQuery("select * from " + table);
 
-        // récupération du résultat de l'ordre
+        // rÃ©cupÃ©ration du rÃ©sultat de l'ordre
         rsetMeta = rset.getMetaData();
 
         // calcul du nombre de colonnes du resultat
@@ -153,7 +150,7 @@ public class Connexion {
             champs = champs + " " + rsetMeta.getColumnLabel(i + 1);
         }
 
-        // ajouter un "\n" à la ligne des champs
+        // ajouter un "\n" Ã  la ligne des champs
         champs = champs + "\n";
 
         // ajouter les champs de la ligne dans l'ArrayList
@@ -170,10 +167,10 @@ public class Connexion {
      * @throws java.sql.SQLException
      */
     public ArrayList remplirChampsRequete(String requete) throws SQLException {
-        // récupération de l'ordre de la requete
+        // rÃ©cupÃ©ration de l'ordre de la requete
         rset = stmt.executeQuery(requete);
 
-        // récupération du résultat de l'ordre
+        // rÃ©cupÃ©ration du rÃ©sultat de l'ordre
         rsetMeta = rset.getMetaData();
 
         // calcul du nombre de colonnes du resultat
@@ -193,7 +190,7 @@ public class Connexion {
                 champs = champs + "," + rset.getString(i + 1);
             }
 
-            // ajouter un "\n" à la ligne des champs
+            // ajouter un "\n" Ã  la ligne des champs
             champs = champs + "\n";
 
             // ajouter les champs de la ligne dans l'ArrayList
@@ -205,27 +202,11 @@ public class Connexion {
     }
 
     /**
-     * Méthode qui execute une requete de MAJ en parametre
+     * MÃ©thode qui execute une requete de MAJ en parametre
      * @param requeteMaj
      * @throws java.sql.SQLException
      */
     public void executeUpdate(String requeteMaj) throws SQLException {
         stmt.executeUpdate(requeteMaj);
     }
-    
-    public static Connection getConnexion() { //Singeton
-    	return conn;
-    }
-    
-    public boolean VerifieConnexion() {
-    	boolean estPasConnecte = false;
-    	try {
-			estPasConnecte = conn.isClosed();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	return estPasConnecte;
-    }
-    
 }
